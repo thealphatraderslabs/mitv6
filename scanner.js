@@ -232,11 +232,7 @@ function smcInsertRow(result) {
 }
 
 function smcGoToAnalysis(symbol) {
-  // Switch to analysis stage and pre-fill ticker
-  document.getElementById('stage-smc-scanner').style.display = 'none';
-  document.getElementById('stage-analysis').style.display    = 'flex';
-  document.getElementById('rail-smc-scanner').classList.remove('active');
-  document.getElementById('rail-analysis').classList.add('active');
+  switchToStage('stage-analysis', 'rail-analysis');
   document.getElementById('tickerInput').value = symbol;
   runAnalysis();
 }
@@ -342,18 +338,9 @@ async function runSMCScan() {
 document.addEventListener('DOMContentLoaded', () => {
 
   // ── NAV / STAGE SWITCHING ──
+  // ── NAV uses central switchToStage from ui.js ──
   document.getElementById('rail-smc-scanner').addEventListener('click', () => {
-    document.getElementById('stage-analysis').style.display    = 'none';
-    document.getElementById('stage-smc-scanner').style.display = 'flex';
-    document.getElementById('rail-analysis').classList.remove('active');
-    document.getElementById('rail-smc-scanner').classList.add('active');
-  });
-
-  // Patch rail-analysis to also hide smc scanner stage
-  const _origRailAnalysis = document.getElementById('rail-analysis');
-  _origRailAnalysis.addEventListener('click', () => {
-    document.getElementById('stage-smc-scanner').style.display = 'none';
-    document.getElementById('rail-smc-scanner').classList.remove('active');
+    switchToStage('stage-smc-scanner', 'rail-smc-scanner');
   });
 
   // ── SCAN CONTROLS ──
