@@ -744,79 +744,26 @@
   showBottomRail();
   window.addEventListener('resize', showBottomRail);
 
-  // Stage switcher helper
-  function switchStage(stageId, btnId) {
-    // Hide all stages
-    ['stage-analysis','stage-smc-scanner','stage-mit-scan','stage-btc-scan'].forEach(id => {
-      document.getElementById(id).style.display = 'none';
-    });
-    // Deactivate all bottom rail btns
-    document.querySelectorAll('.mbr-btn').forEach(b => b.classList.remove('active'));
-    // Show target
-    document.getElementById(stageId).style.display = 'flex';
-    document.getElementById(btnId).classList.add('active');
-  }
-
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('mbr-analysis').addEventListener('click', () => {
-      switchStage('stage-analysis','mbr-analysis');
-      // Also sync desktop rail
-      document.getElementById('rail-analysis').classList.add('active');
-      ['rail-smc-scanner','rail-mit-scan'].forEach(id =>
-        document.getElementById(id)?.classList.remove('active'));
+      switchToStage('stage-analysis', 'rail-analysis');
       document.getElementById('tickerInput').focus();
     });
 
     document.getElementById('mbr-smc').addEventListener('click', () => {
-      switchStage('stage-smc-scanner','mbr-smc');
-      document.getElementById('rail-smc-scanner').classList.add('active');
-      ['rail-analysis','rail-mit-scan'].forEach(id =>
-        document.getElementById(id)?.classList.remove('active'));
+      switchToStage('stage-smc-scanner', 'rail-smc-scanner');
     });
 
     document.getElementById('mbr-mit').addEventListener('click', () => {
-      switchStage('stage-mit-scan','mbr-mit');
-      document.getElementById('rail-mit-scan').classList.add('active');
-      ['rail-analysis','rail-smc-scanner'].forEach(id =>
-        document.getElementById(id)?.classList.remove('active'));
+      switchToStage('stage-mit-scan', 'rail-mit-scan');
     });
 
     document.getElementById('mbr-btc').addEventListener('click', () => {
-      switchStage('stage-btc-scan','mbr-btc');
-      document.getElementById('rail-btc-scan').classList.add('active');
-      ['rail-analysis','rail-smc-scanner','rail-mit-scan'].forEach(id =>
-        document.getElementById(id)?.classList.remove('active'));
+      switchToStage('stage-btc-scan', 'rail-btc-scan');
     });
 
     document.getElementById('mbr-help').addEventListener('click', () => {
       document.getElementById('rail-help')?.click();
-      // Don't switch stage — help is a modal
-      // Keep whichever stage was active
-      document.querySelectorAll('.mbr-btn').forEach(b => b.classList.remove('active'));
-      // Re-activate whichever stage is visible
-      if (document.getElementById('stage-analysis').style.display !== 'none')
-        document.getElementById('mbr-analysis').classList.add('active');
-      else if (document.getElementById('stage-smc-scanner').style.display !== 'none')
-        document.getElementById('mbr-smc').classList.add('active');
-      else if (document.getElementById('stage-mit-scan').style.display !== 'none')
-        document.getElementById('mbr-mit').classList.add('active');
-      else if (document.getElementById('stage-btc-scan').style.display !== 'none')
-        document.getElementById('mbr-btc').classList.add('active');
-    });
-
-    // Sync bottom rail active state when desktop rail is clicked
-    ['rail-analysis','rail-smc-scanner','rail-mit-scan','rail-btc-scan'].forEach(railId => {
-      document.getElementById(railId)?.addEventListener('click', () => {
-        if (!isMobile()) return;
-        const map = {
-          'rail-analysis':'mbr-analysis',
-          'rail-smc-scanner':'mbr-smc',
-          'rail-mit-scan':'mbr-mit',
-          'rail-btc-scan':'mbr-btc',
-        };
-        document.querySelectorAll('.mbr-btn').forEach(b=>b.classList.remove('active'));
-        document.getElementById(map[railId])?.classList.add('active');
-      });
     });
 
     // Hide AUTO label and its controls on mobile via JS (CSS selector limitation)
