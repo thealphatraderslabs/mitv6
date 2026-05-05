@@ -684,10 +684,7 @@ async function runMITScan() {
 
 function mitGoToAnalysis(symbol) {
   if (_mitSim) _mitSim.stop();
-  document.getElementById('stage-mit-scan').style.display='none';
-  document.getElementById('stage-analysis').style.display='flex';
-  document.getElementById('rail-mit-scan').classList.remove('active');
-  document.getElementById('rail-analysis').classList.add('active');
+  switchToStage('stage-analysis', 'rail-analysis');
   document.getElementById('tickerInput').value=symbol;
   runAnalysis();
 }
@@ -697,18 +694,9 @@ function mitGoToAnalysis(symbol) {
 // ═══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
 
+  // ── NAV uses central switchToStage from ui.js ──
   document.getElementById('rail-mit-scan').addEventListener('click', () => {
-    ['stage-analysis','stage-smc-scanner'].forEach(id=>
-      document.getElementById(id).style.display='none');
-    ['rail-analysis','rail-smc-scanner','rail-refresh'].forEach(id=>
-      document.getElementById(id).classList.remove('active'));
-    document.getElementById('stage-mit-scan').style.display='flex';
-    document.getElementById('rail-mit-scan').classList.add('active');
-  });
-
-  document.getElementById('rail-analysis').addEventListener('click', () => {
-    document.getElementById('stage-mit-scan').style.display='none';
-    document.getElementById('rail-mit-scan').classList.remove('active');
+    switchToStage('stage-mit-scan', 'rail-mit-scan');
   });
 
   document.getElementById('mitScanBtn').addEventListener('click', runMITScan);
