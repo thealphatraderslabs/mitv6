@@ -424,12 +424,8 @@ async function runBTCScan() {
       'btc-bubble-svg',
       'btc-tooltip',
       sym => {
-        // Navigate to USDT analysis for the coin
         if (_btcSim) _btcSim.stop();
-        document.getElementById('stage-btc-scan').style.display  = 'none';
-        document.getElementById('stage-analysis').style.display  = 'flex';
-        document.getElementById('rail-btc-scan').classList.remove('active');
-        document.getElementById('rail-analysis').classList.add('active');
+        switchToStage('stage-analysis', 'rail-analysis');
         document.getElementById('tickerInput').value = sym;
         runAnalysis();
       }
@@ -473,20 +469,9 @@ async function smcRunWithBTCConfirm(symbol, tf, minChecks) {
 // ═══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ── Desktop rail ──
+  // ── Desktop rail uses central switchToStage from ui.js ──
   document.getElementById('rail-btc-scan').addEventListener('click', () => {
-    ['stage-analysis','stage-smc-scanner','stage-mit-scan'].forEach(id =>
-      document.getElementById(id).style.display = 'none');
-    ['rail-analysis','rail-smc-scanner','rail-mit-scan','rail-refresh'].forEach(id =>
-      document.getElementById(id)?.classList.remove('active'));
-    document.getElementById('stage-btc-scan').style.display = 'flex';
-    document.getElementById('rail-btc-scan').classList.add('active');
-  });
-
-  // Hide btc-scan when returning to analysis
-  document.getElementById('rail-analysis').addEventListener('click', () => {
-    document.getElementById('stage-btc-scan').style.display = 'none';
-    document.getElementById('rail-btc-scan').classList.remove('active');
+    switchToStage('stage-btc-scan', 'rail-btc-scan');
   });
 
   // ── Scan controls ──
