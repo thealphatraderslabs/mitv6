@@ -282,7 +282,43 @@ function renderHelpModal(tab) {
 // EVENT LISTENERS
 // ═══════════════════════════════════════════════════════════════
 document.getElementById('rail-refresh').addEventListener('click', () => setAutoRefresh(!_autoOn));
+
+// ── CENTRAL STAGE SWITCHER — single source of truth ──────────
+// Every rail icon and every "ANALYSE →" button calls this.
+// No other file should touch stage display directly.
+const ALL_STAGES = ['stage-analysis','stage-smc-scanner','stage-mit-scan','stage-btc-scan'];
+const ALL_RAILS  = ['rail-analysis','rail-smc-scanner','rail-mit-scan','rail-btc-scan'];
+
+function switchToStage(stageId, railId) {
+  ALL_STAGES.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  ALL_RAILS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('active');
+  });
+  const stage = document.getElementById(stageId);
+  if (stage) stage.style.display = 'flex';
+  const rail = document.getElementById(railId);
+  if (rail) rail.classList.add('active');
+  // Sync mobile bottom rail
+  const mobileMap = {
+    'stage-analysis':    'mbr-analysis',
+    'stage-smc-scanner': 'mbr-smc',
+    'stage-mit-scan':    'mbr-mit',
+    'stage-btc-scan':    'mbr-btc',
+  };
+  document.querySelectorAll('.mbr-btn').forEach(b => b.classList.remove('active'));
+  const mbrId = mobileMap[stageId];
+  if (mbrId) {
+    const mbr = document.getElementById(mbrId);
+    if (mbr) mbr.classList.add('active');
+  }
+}
+
 document.getElementById('rail-analysis').addEventListener('click', () => {
+  switchToStage('stage-analysis', 'rail-analysis');
   document.getElementById('tickerInput').focus();
 });
 
